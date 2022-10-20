@@ -32,7 +32,7 @@ contract API3QRNG is ERC721, RrpRequesterV0, Ownable {
         address _airnode,
         bytes32 _endpointIdUint256,
         address _sponsorWallet
-    ) external onlyOwner {
+    ) external {
         airnode = _airnode;
         endpointIdUint256 = _endpointIdUint256;
         sponsorWallet = _sponsorWallet;

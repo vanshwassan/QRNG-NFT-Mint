@@ -6,7 +6,7 @@ module.exports = async () => {
   const apiData = apis['ANU Quantum Random Numbers'];
   const account = (await hre.ethers.getSigners())[0];
   const API3QRNG = await hre.deployments.get('API3QRNG');
-  const API3QRNG = new hre.ethers.Contract(API3QRNG.address, API3QRNG.abi, account);
+  const qrngExample = new hre.ethers.Contract(API3QRNG.address, API3QRNG.abi, account);
 
   // We are deriving the sponsor wallet address from the API3QRNG contract address
   // using the @api3/airnode-admin SDK. You can also do this using the CLI
@@ -17,14 +17,13 @@ module.exports = async () => {
   const sponsorWalletAddress = await airnodeAdmin.deriveSponsorWalletAddress(
     apiData.xpub,
     apiData.airnode,
-    API3QRNG.address
+    qrngExample.address
   );
 
   // Set the parameters that will be used to make Airnode requests
-  const receipt = await API3QRNG.setRequestParameters(
+  const receipt = await qrngExample.setRequestParameters(
     apiData.airnode,
     apiData.endpointIdUint256,
-    apiData.endpointIdUint256Array,
     sponsorWalletAddress
   );
   console.log('Setting request parameters...');
