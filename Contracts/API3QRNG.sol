@@ -6,6 +6,9 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract API3QRNG is ERC721, RrpRequesterV0, Ownable {
+    event RequestedUint256(bytes32 indexed requestId);
+    event ReceivedUint256(bytes32 indexed requestId, uint256 response);
+
     struct Character {
         uint256 strength;
         uint256 intelligence;
@@ -15,7 +18,6 @@ contract API3QRNG is ERC721, RrpRequesterV0, Ownable {
     }
 
     Character[] public characters;
-
     address public airnode;
     bytes32 public endpointIdUint256;
     address public sponsorWallet;
@@ -32,7 +34,7 @@ contract API3QRNG is ERC721, RrpRequesterV0, Ownable {
         address _airnode,
         bytes32 _endpointIdUint256,
         address _sponsorWallet
-    ) external {
+    ) external onlyOwner {
         airnode = _airnode;
         endpointIdUint256 = _endpointIdUint256;
         sponsorWallet = _sponsorWallet;
@@ -51,6 +53,7 @@ contract API3QRNG is ERC721, RrpRequesterV0, Ownable {
         expectingRequestWithIdToBeFulfilled[requestId] = true;
         requestToCharacterName[requestId] = name;
         requestToSender[requestId] = msg.sender;
+        emit RequestedUint256(requestId);
         return requestId;
     }
 
@@ -79,6 +82,7 @@ contract API3QRNG is ERC721, RrpRequesterV0, Ownable {
                 requestToCharacterName[requestId]
             )
         );
+        emit ReceivedUint256(requestId, qrngUint256);
         _safeMint(requestToSender[requestId], newId);
     }
 
