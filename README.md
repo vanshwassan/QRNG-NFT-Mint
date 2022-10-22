@@ -11,7 +11,7 @@
 
 
 ```shell
-$ git clone 
+$ git clone https://github.com/vanshwassan/QRNG-NFT-Mint.git
 ```
 To install all the dependencies:
 ```shell
